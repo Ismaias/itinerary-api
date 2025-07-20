@@ -1,5 +1,6 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { ItineraryOrmEntity } from './itinerary.orm-entity';
+import { TicketType } from 'src/domain/entities/ticket-type.enum';
 
 @Entity('tickets')
 export class TicketOrmEntity {
@@ -13,7 +14,7 @@ export class TicketOrmEntity {
   to: string;
 
   @Column()
-  type: string;
+  type: TicketType;
 
   @Column('jsonb')
   details?: Record<string, any>;

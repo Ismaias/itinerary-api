@@ -3,7 +3,14 @@ import {
   ApiPropertyOptional,
   ApiExtraModels,
 } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, IsOptional, IsObject } from 'class-validator';
+import {
+  IsEnum,
+  IsOptional,
+  IsString,
+  IsObject,
+  IsNotEmpty,
+} from 'class-validator';
+import { TicketType } from 'src/domain/entities/ticket-type.enum';
 
 export class TicketDetailsDto {
   @ApiPropertyOptional({ description: 'Train number, if applicable.' })
@@ -63,12 +70,12 @@ export class TicketDto {
   to: string;
 
   @ApiProperty({
-    example: 'train',
-    description: 'Type of transit (e.g., train, flight, bus, tram, etc.).',
+    example: TicketType.TRAIN,
+    enum: TicketType,
+    description: 'Type of transit (e.g., train, flight, bus, tram, etc.)',
   })
-  @IsString()
-  @IsNotEmpty()
-  type: string;
+  @IsEnum(TicketType)
+  type: TicketType;
 
   @ApiProperty({
     type: TicketDetailsDto,

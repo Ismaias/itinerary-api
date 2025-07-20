@@ -1,4 +1,5 @@
 import { Ticket } from './ticket.entity';
+import { TicketType } from './ticket-type.enum';
 
 export class Itinerary {
   public readonly id?: string;
@@ -54,23 +55,23 @@ export class Itinerary {
       let line = '';
       // Format each ticket based on its type and available details.
       switch (ticket.type) {
-        case 'train':
+        case TicketType.TRAIN:
           line = `Board train ${ticket.details?.trainNumber || ''}${ticket.details?.trainNumber ? ',' : ''} Platform ${ticket.details?.platform || ''} from ${ticket.from} to ${ticket.to}.${ticket.details?.seat ? ' Seat number ' + ticket.details.seat + '.' : ''}`;
           break;
-        case 'tram':
+        case TicketType.TRAM:
           line = `Board the Tram ${ticket.details?.tramNumber || ''} from ${ticket.from} to ${ticket.to}.`;
           break;
-        case 'bus':
+        case TicketType.BUS:
           line = `Board the bus from ${ticket.from} to ${ticket.to}.${ticket.details?.seat ? ' Seat number ' + ticket.details.seat + '.' : ' No seat assignment.'}`;
           break;
-        case 'airport bus':
+        case TicketType.AIRPORT_BUS:
           line = `Board the airport bus from ${ticket.from} to ${ticket.to}.${ticket.details?.seat ? ' Seat number ' + ticket.details.seat + '.' : ' No seat assignment.'}`;
           break;
-        case 'flight':
+        case TicketType.FLIGHT:
           line = `From ${ticket.from}, board the flight ${ticket.details?.flightNumber || ''} to ${ticket.to} from gate ${ticket.details?.gate || ''}${ticket.details?.seat ? ', seat ' + ticket.details.seat : ''}.${ticket.details?.luggage ? ' ' + ticket.details.luggage : ''}`;
           break;
         default:
-          line = `Go from ${ticket.from} to ${ticket.to} by ${ticket.type}.`;
+          line = `Go from ${ticket.from} to ${ticket.to} by ${String(ticket.type)}.`;
       }
       lines.push(`${idx + 1}. ${line}`);
     });
