@@ -1,80 +1,63 @@
 # Lost in Europe - Itinerary API
 
-A scalable, decoupled, and extensible NestJS API for sorting and managing travel tickets, inspired by the "Kevin McCallister is Lost in Europe" scenario.
-
-## Features
-- Accepts unordered tickets and returns the full, ordered itinerary
-- Supports multiple types of transit (train, tram, bus, airport bus, flight, etc.)
-- Extensible for new transit types and details
-- Clean Architecture & DDD principles
-- Fully documented with Swagger
-- Unit and integration tests included
+A robust, scalable NestJS API for sorting and managing travel tickets, inspired by "Kevin McCallister is Lost in Europe".
 
 ---
 
-## Getting Started
+## Overview
+This project provides a REST API to:
+- Accept unordered travel tickets and return the full, ordered itinerary
+- Support multiple types of transit (train, tram, bus, airport bus, flight, etc.)
+- Output a human-readable summary of the journey
+- Be easily extensible for new transit types and business rules
 
-### Environment Variables
+The codebase follows Clean Architecture and DDD principles for maintainability and scalability.
 
-Before running the project, copy `.env.example` to `.env` and adjust the values as needed:
+---
 
+## Features
+- **Automatic itinerary sorting** from unordered tickets
+- **Extensible transit types** via enums and flexible details
+- **Swagger/OpenAPI documentation** at `/`
+- **Unit and integration tests**
+- **Environment-based configuration**
+
+---
+
+## Quick Start
+
+### 1. Clone and Install
+```bash
+git clone <repo-url>
+cd lost-in-europe
+npm install
+```
+
+### 2. Configure Environment
+Copy `.env.example` to `.env` and fill in your values:
 ```env
-# Database configuration
 DB_HOST=
 DB_PORT=
 DB_USER=
 DB_PASS=
 DB_NAME=
-
-# Application
-PORT=3000
-NODE_ENV=development
+PORT=
+NODE_ENV=
 ```
 
-### Install dependencies
+### 3. Run the Application
 ```bash
-npm install
+npm run start:dev
 ```
 
-### Run the application
-```bash
-# development
-npm run start
-
-# watch mode
-npm start:dev
-
-# production
-npm run start:prod
-```
-
-### Run tests
-```bash
-# unit tests
-npm run test
-
-# e2e tests
-npm run test:e2e
-
-# test coverage
-npm run test:cov
-```
+### 4. Access API Docs
+Visit [http://localhost:3000/](http://localhost:3000/) for Swagger UI and try the endpoints.
 
 ---
 
-## API Documentation
+## API Usage Example
 
-After starting the app, access the Swagger UI at:
-
-```
-http://localhost:3000/
-```
-
----
-
-## Example: Create and Retrieve an Itinerary
-
-### Request
+### Create an Itinerary
 **POST** `/itineraries`
 ```json
 {
@@ -90,14 +73,14 @@ http://localhost:3000/
 }
 ```
 
-### Response
+**Response:**
 ```json
 {
   "itineraryId": "<uuid>"
 }
 ```
 
-### Get the human-readable summary
+### Get Human-Readable Summary
 **GET** `/itineraries/{itineraryId}/summary`
 
 **Response:**
@@ -119,36 +102,46 @@ http://localhost:3000/
 
 ---
 
-## Assumptions
-- The itinerary is a single, uninterrupted chain (no branches or cycles)
-- All tickets are valid and form a continuous path
-- To add new transit types, update the enum, DTO, and formatter
+## Testing
+
+- **Unit tests:**
+  ```bash
+  npm run test
+  ```
+- **Integration/E2E tests:**
+  ```bash
+  npm run test:e2e
+  ```
+- **Coverage:**
+  ```bash
+  npm run test:cov
+  ```
 
 ---
 
-## License
-MIT
+## Extending the API
+- To add a new transit type, update the `TicketType` enum, extend the `TicketDetailsDto` and update the formatter in the domain entity.
+- Add new endpoints or business rules by creating new use cases and controllers.
+- See the code comments and Swagger docs for more details.
+
+---
+
+## Assumptions
+- The itinerary is a single, uninterrupted chain (no branches or cycles)
+- All tickets are valid and form a continuous path
+- All required fields (`from`, `to`, `type`) must be present in each ticket
+- The API does not currently support multiple disconnected itineraries in a single request
+- The system assumes all tickets are for the same traveler and trip
+- To add new transit types, update the enum, DTO, and formatter
+- If any information needed for a new transit type or business rule is missing, make reasonable assumptions and document them here
 
 ---
 
 ## What Can Be Improved
 
-- **Migrations**
-  - Implement database migrations for safe schema evolution and production readiness (e.g., with TypeORM migrations).
-
-- **Front-end**
-  - Develop a user-friendly front-end to consume and visualize the itinerary API.
-
-- **Integration and E2E Tests**
-  - Test real integration with the database (TypeORM) and REST endpoints to ensure end-to-end reliability.
-
-- **Centralized Error Handling and Logging**
-  - Implement global interceptors/filters for consistent error handling and centralized logging.
-
-- **Performance and Concurrency**
-  - For large-scale usage, consider queues, caching, and sharding/partitioning strategies to improve scalability and throughput.
-
-- **Internationalization (i18n)**
-  - If needed, prepare the system for multiple languages in user-facing messages and summaries.
-
----
+- **Migrations**: Implement database migrations for safe schema evolution and production readiness (e.g., with TypeORM migrations).
+- **Front-end**: Develop a user-friendly front-end to consume and visualize the itinerary API.
+- **Integration and E2E Tests**: Test real integration with the database (TypeORM) and REST endpoints to ensure end-to-end reliability.
+- **Centralized Error Handling and Logging**: Implement global interceptors/filters for consistent error handling and centralized logging.
+- **Performance and Concurrency**: For large-scale usage, consider queues, caching, and sharding/partitioning strategies to improve scalability and throughput.
+- **Internationalization (i18n)**: If needed, prepare the system for multiple languages in user-facing messages and summaries.
