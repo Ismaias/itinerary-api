@@ -1,98 +1,154 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Lost in Europe - Itinerary API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A scalable, decoupled, and extensible NestJS API for sorting and managing travel tickets, inspired by the "Kevin McCallister is Lost in Europe" scenario.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Features
+- Accepts unordered tickets and returns the full, ordered itinerary
+- Supports multiple types of transit (train, tram, bus, airport bus, flight, etc.)
+- Extensible for new transit types and details
+- Clean Architecture & DDD principles
+- Fully documented with Swagger
+- Unit and integration tests included
 
-## Description
+---
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Getting Started
 
-## Project setup
+### Environment Variables
 
-```bash
-$ npm install
+Before running the project, copy `.env.example` to `.env` and adjust the values as needed:
+
+```env
+# Database configuration
+DB_HOST=
+DB_PORT=
+DB_USER=
+DB_PASS=
+DB_NAME=
+
+# Application
+PORT=3000
+NODE_ENV=development
 ```
 
-## Compile and run the project
+### Install dependencies
+```bash
+npm install
+```
 
+### Run the application
 ```bash
 # development
-$ npm run start
+npm run start
 
 # watch mode
-$ npm run start:dev
+npm start:dev
 
-# production mode
-$ npm run start:prod
+# production
+npm run start:prod
 ```
 
-## Run tests
-
+### Run tests
 ```bash
 # unit tests
-$ npm run test
+npm run test
 
 # e2e tests
-$ npm run test:e2e
+npm run test:e2e
 
 # test coverage
-$ npm run test:cov
+npm run test:cov
 ```
 
-## Deployment
+---
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+## API Documentation
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+After starting the app, access the Swagger UI at:
 
-```bash
-$ npm install -g mau
-$ mau deploy
+```
+http://localhost:3000/
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+---
 
-## Resources
+## Example: Create and Retrieve an Itinerary
 
-Check out a few resources that may come in handy when working with NestJS:
+### Request
+**POST** `/itineraries`
+```json
+{
+  "tickets": [
+    { "from": "St. Anton am Arlberg Bahnhof", "to": "Innsbruck Hbf", "type": "train", "details": { "trainNumber": "RJX 765", "platform": "3", "seat": "17C" } },
+    { "from": "Innsbruck Hbf", "to": "Innsbruck Airport", "type": "tram", "details": { "tramNumber": "S5" } },
+    { "from": "Innsbruck Airport", "to": "Venice Airport", "type": "flight", "details": { "flightNumber": "AA904", "gate": "10", "seat": "18B", "luggage": "Self-check-in luggage at counter." } },
+    { "from": "Gara Venetia Santa Lucia", "to": "Bologna San Ruffillo", "type": "train", "details": { "trainNumber": "ICN 35780", "platform": "1", "seat": "13F" } },
+    { "from": "Bologna San Ruffillo", "to": "Bologna Guglielmo Marconi Airport", "type": "airport bus", "details": {} },
+    { "from": "Bologna Guglielmo Marconi Airport", "to": "Paris CDG Airport", "type": "flight", "details": { "flightNumber": "AF1229", "gate": "22", "seat": "10A", "luggage": "Self-check-in luggage at counter." } },
+    { "from": "Paris CDG Airport", "to": "Chicago O'Hare", "type": "flight", "details": { "flightNumber": "AF136", "gate": "32", "seat": "10A", "luggage": "Luggage will transfer automatically from the last flight." } }
+  ]
+}
+```
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+### Response
+```json
+{
+  "itineraryId": "<uuid>"
+}
+```
 
-## Support
+### Get the human-readable summary
+**GET** `/itineraries/{itineraryId}/summary`
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+**Response:**
+```json
+{
+  "summary": [
+    "Start.",
+    "1. Board train RJX 765, Platform 3 from St. Anton am Arlberg Bahnhof to Innsbruck Hbf. Seat number 17C.",
+    "2. Board the Tram S5 from Innsbruck Hbf to Innsbruck Airport.",
+    "3. From Innsbruck Airport, board the flight AA904 to Venice Airport from gate 10, seat 18B. Self-check-in luggage at counter.",
+    "4. Board train ICN 35780, Platform 1 from Gara Venetia Santa Lucia to Bologna San Ruffillo. Seat number 13F.",
+    "5. Board the airport bus from Bologna San Ruffillo to Bologna Guglielmo Marconi Airport. No seat assignment.",
+    "6. From Bologna Guglielmo Marconi Airport, board the flight AF1229 to Paris CDG Airport from gate 22, seat 10A. Self-check-in luggage at counter.",
+    "7. From Paris CDG Airport, board the flight AF136 to Chicago O'Hare from gate 32, seat 10A. Luggage will transfer automatically from the last flight.",
+    "Last destination reached."
+  ]
+}
+```
 
-## Stay in touch
+---
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## Assumptions
+- The itinerary is a single, uninterrupted chain (no branches or cycles)
+- All tickets are valid and form a continuous path
+- To add new transit types, update the enum, DTO, and formatter
+
+---
 
 ## License
+MIT
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+---
+
+## What Can Be Improved
+
+- **Migrations**
+  - Implement database migrations for safe schema evolution and production readiness (e.g., with TypeORM migrations).
+
+- **Front-end**
+  - Develop a user-friendly front-end to consume and visualize the itinerary API.
+
+- **Integration and E2E Tests**
+  - Test real integration with the database (TypeORM) and REST endpoints to ensure end-to-end reliability.
+
+- **Centralized Error Handling and Logging**
+  - Implement global interceptors/filters for consistent error handling and centralized logging.
+
+- **Performance and Concurrency**
+  - For large-scale usage, consider queues, caching, and sharding/partitioning strategies to improve scalability and throughput.
+
+- **Internationalization (i18n)**
+  - If needed, prepare the system for multiple languages in user-facing messages and summaries.
+
+---
